@@ -1,0 +1,171 @@
+<div class="container">
+  <app-plot-navs></app-plot-navs>
+  <div class="row">
+    <div class="col-4">
+      <h3>Все счетчики</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Номер</th>
+            <th>Тип</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let counter of counters" [ngClass]="{'table-active': counter==activeCounter}"
+            (click)="activate($event, counter)">
+            <td>{{counter.number}}</td>
+            <td>{{counter.type}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+          data-target="#editCounter">Редактировать</button>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+          data-target="#addCounter">Добавить</button>
+      </div>
+    </div>
+    <div class="col-8">
+      <h3>Информация по прибору учета</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Дата установки</th>
+            <th>Дата поверки</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{activeCounter.installDate| date :'short' : '' :'ru'}}</td>
+            <td>{{activeCounter.calibrationDate| date :'short' : '' :'ru'}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Последние показания</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Дата снятия</th>
+            <th>Дата учета</th>
+            <th>Показание</th>
+            <th>Источник</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reading of activeCounter.readings">
+            <td>{{reading.date  | date :'short' : '' :'ru'}}</td>
+            <td>{{reading.settlementDate | date :'short' : '' :'ru'}}</td>
+            <td>{{reading.value}}</td>
+            <td>{{reading.source}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
+          data-target="#addReadings">Добавить показание</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modals -->
+
+<!-- Добавление счетчика -->
+<div class="modal fade" id="addCounter" tabindex="-1" role="dialog" aria-labelledby="addDocLabel" aria-hidden="true">
+  <div class="modal-dialog counter-modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить Счетчик</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label for="counter">Номер счетчика</label>
+          <input type="text" class="form-control" placeholder="Номер счетчика">
+          <label for="counter">Дата установки</label>
+          <input type="date" class="form-control" placeholder="">
+          <label for="counter">Дата начала учета</label>
+          <input type="date" class="form-control" placeholder="">
+          <label for="counter">Дата поверки</label>
+          <input type="date" class="form-control" placeholder="">
+          <label for="counter">Тип</label>
+          <input type="text" class="form-control" placeholder="Тип">
+          <div class="row">
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary">Добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Добавление показания -->
+<div class="modal fade" id="addReadings" tabindex="-1" role="dialog" aria-labelledby="addDocLabel" aria-hidden="true">
+  <div class="modal-dialog counter-modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить показание</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label for="counter">Показание</label>
+          <input type="number" class="form-control" placeholder="Показание">
+          <label for="counter">Дата снятия</label>
+          <input type="date" class="form-control" placeholder="">
+          <label for="counter">Источник</label>
+          <input type="text" class="form-control" placeholder="Личный кабинет">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary">Добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Редактирование счетчика -->
+<div class="modal fade" id="editCounter" tabindex="-1" role="dialog" aria-labelledby="addDocLabel" aria-hidden="true">
+  <div class="modal-dialog counter-modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить Счетчик</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <label for="counter">Номер счетчика</label>
+          <input type="text" class="form-control" value="{{activeCounter.number}}">
+
+          <label for="counter">Дата установки</label>
+          <input type="date" class="form-control" value="{{activeCounter.installDate|date:'yyyy-MM-dd'}}">
+
+          <label for="counter">Дата начала учета</label>
+          <input type="date" class="form-control" value="{{activeCounter.calibrationDate|date:'yyyy-MM-dd'}}">
+
+          <label for="counter">Дата поверки</label>
+          <input type="date" class="form-control" value="{{activeCounter.calibrationDate | date:'yyyy-MM-dd'}}">
+
+          <label for="counter">Тип</label>
+          <input type="text" class="form-control" placeholder="Тип">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary">Редактировать</button>
+      </div>
+    </div>
+  </div>
+</div>
